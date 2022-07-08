@@ -23,6 +23,7 @@ function track(target, key) {
     let deps = depsMap.get(key);
     if(!deps) { depsMap.set(key, (deps = new Set())); }
     deps.add(activeEffect);
+    activeEffect.deps.push(deps);
 }
 // 对象的key被设置时，调用副作用函数
 function trigger(target, key) {
