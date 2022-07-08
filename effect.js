@@ -8,11 +8,19 @@ let activeEffect;
 // effect v2
 function effect(fn) {
     const effectFn = () => {
+        cleanup(effectFn);
         activeEffect = effectFn;
         fn();
     }
     effectFn.deps = [];
     effectFn();
+}
+function cleanup(effectFn) {
+    for (let i = 0; i < effectFn.deps.length; i++) {
+        const deps = effectFn.deps[i];
+        deps.delete(effectFn);
+    }
+    effectFn.deps.length = 0;
 }
 // 对象的key被读取时，添加副作用函数，所谓的副作用函，描述了对象的key发生变化时，要随之变化的东西
 const bucket = new WeakMap();
